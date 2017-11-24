@@ -12,7 +12,8 @@ import java.text.NumberFormat;
  */
 public class MainActivity extends AppCompatActivity {
     int numbOfCoffeeOrdered = 0;
-    double pricePerCoffee = 4.75;
+
+    Pricing totalPrice = new Pricing(numbOfCoffeeOrdered);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,50 +25,50 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        String priceMessage = "Thank You! Your order has been placed." + "\nYou have been charged $"
-                + numbOfCoffeeOrdered * pricePerCoffee;
-        displayMessage(priceMessage);
+        displayMessage();
     }
 
     /**
      * This method is called when the + button is clicked.
      */
     public void increment(View view) {
-        numbOfCoffeeOrdered++;
-        displayQuantity(numbOfCoffeeOrdered);
-        displayPrice(numbOfCoffeeOrdered * pricePerCoffee);
+        totalPrice.setNumberOfCoffeeOrdered(++numbOfCoffeeOrdered);
+        totalPrice.setTotalPrice(numbOfCoffeeOrdered);
+        displayQuantity();
+        displayPrice();
     }
 
     /**
      * This method is called when the - button is clicked.
      */
     public void decrement(View view) {
-        numbOfCoffeeOrdered--;
-        displayQuantity(numbOfCoffeeOrdered);
-        displayPrice(numbOfCoffeeOrdered * pricePerCoffee);
+        totalPrice.setNumberOfCoffeeOrdered(--numbOfCoffeeOrdered);
+        totalPrice.setTotalPrice(numbOfCoffeeOrdered);
+        displayQuantity();
+        displayPrice();
     }
 
     /**
      * This method displays the given quantity value on the screen.
      */
-    private void displayQuantity(int number) {
+    private void displayQuantity() {
         TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
-        quantityTextView.setText("" + number);
+        quantityTextView.setText("" + totalPrice.getNumberOfCoffeeOrdered());
     }
 
     /**
      * This method displays the given price on the screen.
      */
-    private void displayPrice(double number) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
+    private void displayPrice() {
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(NumberFormat.getCurrencyInstance().format(totalPrice.getTotalPrice()));
     }
 
     /**
      * This method displays the given text on the screen.
      */
-    private void displayMessage(String message) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(message);
+    private void displayMessage() {
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(totalPrice.getOrderSummary());
     }
 }
